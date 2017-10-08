@@ -6,6 +6,8 @@ from BaseAI_3 import BaseAI
 
 DEPTH = 4
 
+# working minimax with ab-pruning backup
+
 class PlayerAI(BaseAI):
     def __init__(self):
         """create and configure logger for file writing"""

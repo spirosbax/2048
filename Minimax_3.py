@@ -4,9 +4,9 @@ import logging
 from sys import maxsize
 from BaseAI_3 import BaseAI
 
-(PLAYER_TURN, COMPUTER_TURN) = (0, 1)
-vecIndex = [UP, DOWN, LEFT, RIGHT] = range(4)
 DEPTH = 3
+
+# working minimax backup
 
 class PlayerAI(BaseAI):
     def __init__(self):
