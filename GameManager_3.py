@@ -1,13 +1,14 @@
 from Grid_3       import Grid
 from ComputerAI_3 import ComputerAI
 
-# from PlayerAI_3   import PlayerAI 
+from PlayerAI_3   import PlayerAI 
 
 # working minimax with ab-pruning backup
-from Minimax_ab_pruning_3   import PlayerAI
+# from Minimax_ab_pruning_3   import PlayerAI
 
 # working minimax backup
 # from Minimax_3   import PlayerAI
+
 from Displayer_3  import Displayer
 from random       import randint
 import time

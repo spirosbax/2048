@@ -99,7 +99,7 @@ class PlayerAI(BaseAI):
             beta = min(min_value,beta)
         return min_value
 def evaluate(grid):
-    # returns number of available cells
+    # returns number of blank tiles
     return len(grid.getAvailableCells())
 
 """Describes a tree node for both min and max"""

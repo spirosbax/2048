@@ -99,33 +99,44 @@ class PlayerAI(BaseAI):
             beta = min(min_value,beta)
         return min_value
 def evaluate(grid):
-    dict = {"top_left":(0,0),"top_right":(0,3),"bot_left":(3,0),"bot_right":(3,3)}
-    corners = ["top_left","top_right","bot_left","bot_right"]
-    mntnct = 0
-    sum = 0
-    corner = None
-
-    # calculate monotonicity value
     heur_vec = []
 
-    max = grid.getMaxTile()
-    for i in corners:
-        if max == grid.getCellValue(dict[i]):
-            mntnct += 20
-            corner = i
-    if corner:
+    """1st Heuristic: Number of empty tiles""" 
+    number_of_blank_tiles = len(grid.getAvailableCells())
+    heur_vec.append(number_of_blank_tiles)
 
+    """2nd Heuristic: Monotonicity of board"""
+    #TODO rotate mask at 90,180,270 degrees, add masks and then apply final mask
 
+    grid_mask = [[16,15,14,13],
+                 [9,10,11,12],
+                 [8,7,6,5],
+                 [1,2,3,4]]
+    monotonicity = 0
+    # apply grid_mask
+    for row in range(3):
+        for column in range(3):
+            monotonicity += grid.getCellValue((row,column)) * grid_mask[row][column]
+    # print(monotonicity,number_of_blank_tiles)
+    heur_vec.append(monotonicity)
 
+    """3rd Heuristic: Max tile on top right corner"""
+    bonus = 0
+    if grid.map[0][3] == grid.getMaxTile():
+        bonus+=100
+    heur_vec.append(bonus)
 
+    """calculate final heuristic score"""
+    # weight vetor
+    # weight_vec = [1] * len(heur_vec)
+    weight_vec = [1,1,0]
 
-    heur_vec.append(len(grid.getAvailableCells()))
-    weight_vec = [1] * len(heur_vec)
-    for i in range(0,len(heur_vec)):
-        sum+=heur_vec[i] * weight_vec[i]
+    sum = 0
+    for i in range(len(heur_vec)):
+        sum+=heur_vec[i] * weight_vec[i] #apply weights
     return sum
 
-"""Describes a tree node for both min and max"""
+
 class Node:
     def __init__(self,move=None,grid=None,depth=None):
         self._move = move
