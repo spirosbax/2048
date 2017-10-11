@@ -104,36 +104,76 @@ def evaluate(grid):
     """1st Heuristic: Number of empty tiles""" 
     number_of_blank_tiles = len(grid.getAvailableCells())
     heur_vec.append(number_of_blank_tiles)
+    # print(number_of_blank_tiles)
 
     """2nd Heuristic: Monotonicity of board"""
-    #TODO rotate mask at 90,180,270 degrees, add masks and then apply final mask
+    #rotate mask at 90,180,270 degrees, add masks and then apply final mask
+    # code to generate mask:
+    # import numpy as np
+    # ar = np.array([[16,15,14,13],
+    #                [9,10,11,12],
+    #                [8,7,6,5],
+    #                [1,2,3,4]])
+    # sum = 0
+    # sum+=ar
+    # for i in range(3):
+    #     ar = np.rot90(ar)
+    #     sum+=ar
+    #
+    # grid_mask = [[34,38,30,34],
+    #              [30,34,34,38],
+    #              [38,34,34,30],
+    #              [34,30,38,34]]
+    # monotonicity = 0
+    # # apply grid_mask
+    # for row in range(3):
+    #     for column in range(3):
+    #         monotonicity += grid.getCellValue((row,column)) * grid_mask[row][column]
+    # # print(monotonicity,number_of_blank_tiles)
 
-    grid_mask = [[16,15,14,13],
-                 [9,10,11,12],
-                 [8,7,6,5],
-                 [1,2,3,4]]
-    monotonicity = 0
-    # apply grid_mask
-    for row in range(3):
-        for column in range(3):
-            monotonicity += grid.getCellValue((row,column)) * grid_mask[row][column]
-    # print(monotonicity,number_of_blank_tiles)
-    heur_vec.append(monotonicity)
+    direction_vector = []
+    down_score = 0
+    right_score = 0
+    for i in range(2):
+        for j in range(2):
+            if grid.map[i][j] < grid.map[i+1][j]:
+                down_score+=5
 
-    """3rd Heuristic: Max tile on top right corner"""
+            if grid.map[i][j] < grid.map[i][j+1]:
+                right_score+=5
+    direction_vector =[60-down_score, down_score, 60 - right_score , right_score]
+    # print(direction_vector)
+
+    max = down_score
+    for i in direction_vector:
+        if i > max:
+            max = i
+
+    monotonicity_score = max
+    # print(monotonicity_score)
+    heur_vec.append(monotonicity_score)
+
+    """3rd Heuristic: Max tile on corner"""
     bonus = 0
-    if grid.map[0][3] == grid.getMaxTile():
-        bonus+=100
+    if grid.map[0][0] == grid.getMaxTile():
+        bonus+=10
+    elif grid.map[0][3] == grid.getMaxTile():
+        bonus+=10
+    elif grid.map[3][0] == grid.getMaxTile():
+        bonus+=10
+    elif grid.map[3][3] == grid.getMaxTile():
+        bonus+=10
     heur_vec.append(bonus)
 
     """calculate final heuristic score"""
     # weight vetor
-    # weight_vec = [1] * len(heur_vec)
-    weight_vec = [1,1,0]
+    weight_vec = [1] * len(heur_vec)
+    weight_vec = [2,1,1]
 
     sum = 0
     for i in range(len(heur_vec)):
         sum+=heur_vec[i] * weight_vec[i] #apply weights
+    # print(sum)
     return sum
 
 
