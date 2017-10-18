@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# automate testing of new heurtistics
 
 for num in {1..10}
     do
@@ -8,4 +9,4 @@ for num in {1..10}
         last_line=$(tac output.txt |egrep -m 1 .)
         line="${num}) $last_line"
         echo $line >> results.txt
-    done
+    done 
